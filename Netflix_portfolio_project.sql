@@ -60,4 +60,38 @@ order by total_duration desc
 limit 10 ;
 
 
-#Who are the top 5 actors/actresses with the most appearances in the datasets?
+# What are the top 10 most popular genres of movies and TV shows on Netflix?
+select listed_in, count(*) as num_titles
+from netflix_titles
+group by  listed_in
+order by num_titles desc
+limit 10;
+
+#what is the average duration of movies and TV shows on Netflix?
+select type, round(avg(duration)) as avg_duration
+from netflix_titles
+group by type;
+
+# Top 10 shows having  a rating of TV-MA?
+select title, description, rating
+from netflix_titles
+where type = 'TV Show' and rating ='TV-MA'
+order by title desc
+limit 10;
+
+#Which shows are listed under both the 'Drama' and 'Horror' genres
+SELECT type, title, listed_in
+FROM netflix_titles
+WHERE listed_in IN ('TV Dramas', 'TV Horror')
+  or listed_in LIKE '%TV Dramas%'
+  or listed_in LIKE '%TV Horror%'
+  limit 5;
+  
+# Which countries have the most original movies and TV shows produced by Netflix?
+SELECT country, COUNT(*) as count
+FROM netflix_titles
+WHERE (type = 'Movie' AND listed_in LIKE '%Netflix Original%')
+   OR (type = 'TV Show' AND listed_in LIKE '%Netflix Original%')
+GROUP BY country
+ORDER BY count DESC;
+
